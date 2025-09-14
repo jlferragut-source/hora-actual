@@ -1,30 +1,26 @@
-from flask import Flask, request, jsonify
-import requests
+from flask import Flask, jsonify
+import datetime
 
 app = Flask(__name__)
 
 @app.route('/api/hora_actual', methods=['GET', 'POST'])
 def get_current_time():
     try:
-        # 1. Llamar a la API de World Time para obtener el JSON completo
-        response = requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid')
-        data = response.json()
+        # Obtener la hora y fecha actual del sistema del servidor
+        now = datetime.datetime.now()
         
-        # 2. Extraer la cadena de la fecha y hora
-        datetime_str = data['datetime']
+        # Formatear la hora y la fecha a un string legible
+        hora_str = now.strftime("%H:%M") # Formato HH:MM
         
-        # 3. Formatear la cadena para obtener solo la hora (HH:MM)
-        # Por ejemplo, de "2025-09-14T18:30:58.798228+02:00" a "18:30"
-        hora_str = datetime_str[11:16] 
-        
-        # 4. Crear el mensaje final en un formato que Wildix entienda
+        # Crear el mensaje para Wildix
         message = f"La hora actual es: {hora_str}"
         
-        # 5. Devolver la respuesta en un JSON simple con el campo "message"
+        # Devolver la respuesta en el formato que Wildix espera
         return jsonify({"message": message})
     except Exception as e:
-        # Manejo de errores
+        # Manejar errores
         return jsonify({"message": "Lo siento, no pude obtener la hora en este momento."}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
