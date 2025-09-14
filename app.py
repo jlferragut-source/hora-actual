@@ -21,7 +21,8 @@ def get_current_time():
         return jsonify({"message": message})
     except Exception as e:
         # Manejar errores y devolver un mensaje genérico
-        return jsonify({"message": "Lo siento, no pude obtener la hora en este momento."}), 500
+        return jsonify({"message": "oh,oh, no pude obtener la hora en este momento."}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
